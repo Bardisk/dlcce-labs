@@ -329,8 +329,11 @@ module clock(
         else begin
             if (adjust) begin
                 if (adjustline[5]) begin
-                    if (adh >= 14)
-                        adh <= adh - 50;
+                    if (adh >= 14) begin
+                        if (adh >= 20)
+                            adh <= adh - 20;
+                        else adh <= adh - 10;
+                    end
                     else
                         adh <= adh + 10;
                 end
@@ -401,8 +404,11 @@ module clock(
         else begin
             if (setalert) begin
                 if (adjustline[5]) begin
-                    if (alh >= 14)
-                        alh <= alh - 50;
+                    if (alh >= 14) begin
+                        if (alh >= 20)
+                            alh <= alh - 20;
+                        else alh <= alh - 10;
+                    end
                     else
                         alh <= alh + 10;
                 end
