@@ -328,10 +328,18 @@ module clock(
         end
         else begin
             if (adjust) begin
-                if (adjustline[5])
-                    adh <= adh + 10;
-                else if (adjustline[4])
-                    adh <= adh + 1;
+                if (adjustline[5]) begin
+                    if (adh >= 14)
+                        adh <= adh - 50;
+                    else
+                        adh <= adh + 10;
+                end
+                else if (adjustline[4]) begin
+                    if (adh >= 23)
+                        adh <= 0;
+                    else
+                        adh <= adh + 1;
+                end
             end
             else adh <= hour;
         end
@@ -344,10 +352,18 @@ module clock(
         end
         else begin
             if (adjust) begin
-                if (adjustline[3])
-                    adm <= adm + 10;
-                else if (adjustline[2])
-                    adm <= adm + 1;
+                if (adjustline[3]) begin
+                    if (adm >= 50)
+                        adm <= adm - 50;
+                    else
+                        adm <= adm + 10;
+                end
+                else if (adjustline[2]) begin
+                    if (adm >= 59)
+                        adm <= 0;
+                    else
+                        adm <= adm + 1;
+                end
             end
             else adm <= minute;
         end
@@ -360,10 +376,18 @@ module clock(
         end
         else begin
             if (adjust) begin
-                if (adjustline[1])
-                    ads <= ads + 10;
-                else if (adjustline[0])
-                    ads <= ads + 1;
+                if (adjustline[1]) begin
+                    if (ads >= 50)
+                        ads <= ads - 50;
+                    else
+                        ads <= ads + 10;
+                end
+                else if (adjustline[0]) begin
+                    if (ads >= 59)
+                        ads <= 0;
+                    else
+                        ads <= ads + 1;
+                end
             end
             else ads <= second;
         end
@@ -376,10 +400,18 @@ module clock(
         end
         else begin
             if (setalert) begin
-                if (adjustline[5])
-                    alh <= alh + 10;
-                else if (adjustline[4])
-                    alh <= alh + 1;
+                if (adjustline[5]) begin
+                    if (alh >= 14)
+                        alh <= alh - 50;
+                    else
+                        alh <= alh + 10;
+                end
+                else if (adjustline[4]) begin
+                    if (alh >= 23)
+                        alh <= 0;
+                    else
+                        alh <= alh + 1;
+                end
             end
         end
     end
@@ -391,10 +423,18 @@ module clock(
         end
         else begin
             if (setalert) begin
-                if (adjustline[3])
-                    alm <= alm + 10;
-                else if (adjustline[2])
-                    alm <= alm + 1;
+                if (adjustline[3]) begin
+                    if (alm >= 50)
+                        alm <= alm - 50;
+                    else
+                        alm <= alm + 10;
+                end
+                else if (adjustline[2]) begin
+                    if (alm >= 59)
+                        alm <= 0;
+                    else
+                        alm <= alm + 1;
+                end
             end
         end
     end
@@ -406,10 +446,18 @@ module clock(
         end
         else begin
             if (setalert) begin
-                if (adjustline[1])
-                    als <= als + 10;
-                else if (adjustline[0])
-                    als <= als + 1;
+                if (adjustline[1]) begin
+                    if (als >= 50)
+                        als <= als - 50;
+                    else
+                        als <= als + 10;
+                end
+                else if (adjustline[0]) begin
+                    if (als >= 59)
+                        als <= 0;
+                    else
+                        als <= als + 1;
+                end
             end
         end
     end
@@ -441,7 +489,7 @@ module clock(
     assign alertlighten = (enablealert && (hour == alh) && (minute == alm) && (second == als));
 
     timeoutledTube #(.timeout(10000)) alertube(
-        .en(endlighten),
+        .en(alertlighten),
         .clock(clock_10KHZ),
         .signal(clock_10HZ),
         .rst(reset),
@@ -567,7 +615,7 @@ module lab04plus(
         .clock_1HZ_real(clock_1HZ_real),
         .reset(groupreset[0]),
         .adjust(SW[0]),
-        .adjustline(SW[10:4]),
+        .adjustline(SW[9:4]),
         .adjustlight(publicLED[0][0]),
         .trysetalert(SW[2]),
         .setalertlight(publicLED[0][2]),
