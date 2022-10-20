@@ -470,23 +470,30 @@ module clock(
 
     //distribute the display
     reg [7:0] dish, dism, diss;
-    always @(adjust, setalert) begin
-        if (adjust) begin
-            dish = adh;
-            dism = adm;
-            diss = ads;
-        end
-        else begin
-            if (setalert) begin
-                dish = alh;
-                dism = alm;
-                diss = als;
+    always @(*) begin
+        if (reset) begin
+            if (adjust) begin
+                dish = adh;
+                dism = adm;
+                diss = ads;
             end
             else begin
-                dish = hour;
-                dism = minute;
-                diss = second;
+                if (setalert) begin
+                    dish = alh;
+                    dism = alm;
+                    diss = als;
+                end
+                else begin
+                    dish = hour;
+                    dism = minute;
+                    diss = second;
+                end
             end
+        end
+        else begin
+            dish = hour;
+            dism = minute;
+            diss = second;
         end
     end
 
@@ -631,5 +638,5 @@ module lab04plus(
         .HEX(targetHEX[0]),
         .AN(targetAN[0])
     );
-
+    
 endmodule

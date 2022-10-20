@@ -6,8 +6,8 @@ $(TNAME)_wave.vcd: $(TNAME).sv $(TNAME)_tb.sv
 	@gtkwave $(TNAME)_wave.vcd
 
 clean:
-	-@rm *.out
-	-@rm *.vcd
+	-@if [ -e *.out ]; then rm *.out; fi;
+	-@if [ -e *.vcd ]; then rm *.vcd; fi;
 
 create:
 	@mkdir $(NAME)

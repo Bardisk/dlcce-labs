@@ -16,6 +16,8 @@ wire [7:0] AN;
 always #1
     clock = ~clock;
 
+
+
 lab04plus tb(
     .clock_100MHZ(clock),
     .LED(LED),
@@ -23,6 +25,8 @@ lab04plus tb(
     .AN(AN),
     .HEX(HEX)
 );
+
+
 
 wire suspend;
 assign suspend = SW[0];
@@ -35,13 +39,12 @@ wire [2:0] mode;
 assign mode = SW[15:13];
 
 initial begin
-
     clock = 0;
 
     SW[1] = 1;
     #100
     SW[1] = 0;
-    #100
+    #10000
     SW[15:13] = 3'b001;
     #100
     SW[2] = 1;

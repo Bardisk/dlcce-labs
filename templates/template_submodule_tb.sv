@@ -1,8 +1,11 @@
 `timescale 1ns/1ps
+
+`include "template.sv"
+
 module template_tb();
 
 initial begin
-    $dumpfile("template_wave.vcd");
+    $dumpfile("build/wave.vcd");
     $dumpvars;
 end
 
@@ -10,8 +13,5 @@ template tb(
 
 );
 
-initial begin
-    $finish;
-end
-
 endmodule
+

@@ -1,2 +1,4 @@
-*.vcd
+build
 *.out
+*.vcd
+*.log

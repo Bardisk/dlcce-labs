@@ -1,0 +1,3 @@
+[rules]
+non_ansi_module = true
+wire_reg = true
