@@ -1,3 +1,5 @@
+ID ?= 211240088
+
 create:
 	@mkdir $(NAME)
 	@cat templates/template.mk >$(NAME)/makefile
@@ -6,4 +8,10 @@ create:
 	@cp .gitignore $(NAME)/
 	@cp .svlint.toml $(NAME)/
 	@sed -i 's/template/$(NAME)/g' $(NAME)/$(NAME).sv $(NAME)/$(NAME)_tb.sv
-.PHONY: create
+
+submit:
+	@echo "to do with packing reports and codes"
+
+.PHONY: create submit
+
+
