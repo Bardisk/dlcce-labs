@@ -8,10 +8,11 @@
 
 + 按照模板自动新建一个 Lab 或 oj 项目。
 + 按照模板自动创建项目子模块（仅 Lab 项目）。
++ 自动导入和导出常用子模块。
 + 自动用 iverilog 仿真项目，或单独仿真子模块。
 + 自动打包实验报告及其附件。
 
-仓库的使用环境应该是 VSCode  (with verilog-hdl support) + iverilog + gtkwave + svls 。
+仓库的使用环境应该是 VSCode  (with verilog-hdl support) + iverilog + gtkwave + svls 。Iverilog 的 linter 需要加上参数 `-I ../ -I include/`。
 
 *声明：公开仓库仅是方便交流开发项目管理功能心得之用，请同修读这门课程的同学自觉遵守学术诚信，不要抄袭 `.sv` 源代码！*~~虽然没什么好抄的。~~
 
