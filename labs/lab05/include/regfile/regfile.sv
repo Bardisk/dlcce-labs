@@ -13,17 +13,24 @@ module regfile
 );
 
     reg [width-1:0] file [size-1:0];
+    integer i;
+
+    initial begin
+        for (i = 0; i < size; i++)
+            file[i] <= 0;
+    end
 
     always @(posedge clock, negedge reset) begin
         if (!reset) begin
-            file = '{default:0};
+            for (i = 0; i < size; i++)
+                file[i] <= 0;
         end
         else if (writeEn) begin
-            file[writeSel] <= indata;
+            file[writeSel] <= 0;
         end
     end
+
     assign outdata = file[readSel];
-    
 
 endmodule
 

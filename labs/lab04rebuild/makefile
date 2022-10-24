@@ -1,7 +1,11 @@
 TNAME ?= $(basename $(notdir $(shell find *.sv | grep -v tb)))
 
 compile: build/wave.vcd
-	@echo "Compile done!"
+	@echo "Compile finished!"
+
+pre-compile: build/wave.vcd
+	@if ! [ -e build ]; then mkdir build; fi;
+	@iverilog -E -I include/ $(TNAME)_tb.sv -o build/$(TNAME)_pre.sv
 
 run: compile
 	@gtkwave build/wave.vcd
@@ -29,10 +33,10 @@ unit:
 	@./build/$(NAME).vexe
 
 immod:
-	@cp -r ../../libs/$(MOD) ./include/
+	@cp -a ../../libs/$(MOD) ./include/
 	@sed -i '/\/\/add includes here/i\`include "$(MOD)/$(MOD).sv"' $(TNAME).sv
 
 exmod:
-	@cp -r ./include/$(MOD) ../../libs/
+	@cp -a ./include/$(MOD) ../../libs/
 
 .PHONY: clean create compile run unit immod exmod
