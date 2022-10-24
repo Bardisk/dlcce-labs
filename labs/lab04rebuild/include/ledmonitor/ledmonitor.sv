@@ -9,7 +9,6 @@ module ledmonitor(
     output wire [7:0] targeten,
     output wire [7:0] targetdisplay
 );
-
     reg [2:0] select;
 
     assign targeten = (8'b11111111 ^ (8'b1 << select)) | (~en);

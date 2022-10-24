@@ -1,6 +1,8 @@
 `ifndef module_ledmonitor
 `define module_ledmonitor
 
+`include "ledmonitor/screens.sv"
+
 module ledmonitor(
     input wire clock,
     input wire rst,
@@ -18,10 +20,16 @@ module ledmonitor(
     always @(posedge clock, negedge rst) begin
         if (!rst)
             select <= 0;
-        else
-            select <= (select + 1);
+        else begin
+            if (select == 7)
+                select <= 0;
+            else
+                select <= (select + 1);
+        end
     end
 
 endmodule
+
+`include "ledmonitor/screens.sv"
 
 `endif

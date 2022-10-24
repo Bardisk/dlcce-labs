@@ -29,10 +29,11 @@ unit:
 	@./build/$(NAME).vexe
 
 immod:
-	@cp -a ../../libs/$(MOD) ./include/
+	@if ! [ -e include ]; then mkdir include; fi;
+	@cp -r ../../libs/$(MOD) ./include/
 	@sed -i '/\/\/add includes here/i\`include "$(MOD)/$(MOD).sv"' $(TNAME).sv
 
 exmod:
-	@cp -a ./include/$(MOD) ../../libs/
+	@cp -r ./include/$(MOD) ../../libs/
 
 .PHONY: clean create compile run unit immod exmod

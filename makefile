@@ -1,13 +1,25 @@
 ID ?= 211240088
+CREDIR = labs/$(NAME)
+CREDIROJ = oj/$(NAME)
 
 create:
-	@mkdir $(NAME)
-	@cat templates/template.mk >$(NAME)/makefile
-	@cat templates/template.sv >$(NAME)/$(NAME).sv
-	@cat templates/template_tb.sv >$(NAME)/$(NAME)_tb.sv
-	@cp .gitignore $(NAME)/
-	@cp .svlint.toml $(NAME)/
-	@sed -i 's/template/$(NAME)/g' $(NAME)/$(NAME).sv $(NAME)/$(NAME)_tb.sv
+	@mkdir $(CREDIR)
+	@cat templates/template.mk >$(CREDIR)/makefile
+	@cat templates/template.sv >$(CREDIR)/$(NAME).sv
+	@cat templates/template_tb.sv >$(CREDIR)/$(NAME)_tb.sv
+	@cp .gitignore $(CREDIR)/
+	@cp .svlint.toml $(CREDIR)/
+	@sed -i 's/template/$(NAME)/g' $(CREDIR)/$(NAME).sv $(CREDIR)/$(NAME)_tb.sv
+
+create-oj:
+	@mkdir $(CREDIROJ)
+	@cat templates/template_oj.mk >$(CREDIROJ)/makefile
+	@cat templates/template.sv >$(CREDIROJ)/$(NAME).sv
+	@cat templates/template_tb.sv >$(CREDIROJ)/$(NAME)_tb.sv
+	@cp .gitignore $(CREDIROJ)/
+	@cp .svlint.toml $(CREDIROJ)/
+	@sed -i 's/template/$(NAME)/g' $(CREDIROJ)/$(NAME).sv $(CREDIROJ)/$(NAME)_tb.sv
+	@sed -i '1,4d' $(CREDIROJ)/$(NAME).sv
 
 submit:
 	@echo "to do with packing reports and codes"
