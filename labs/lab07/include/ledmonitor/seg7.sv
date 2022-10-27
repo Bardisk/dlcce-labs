@@ -10,9 +10,9 @@ module seg7(
 
     always @(N, dot) begin
         casex (N)
-            4'hf: body = 7'b0000111;
-            4'he: body = 7'b0000011;
-            4'hd: body = 7'b1000001;
+            4'hf: body = 7'b0001110;
+            4'he: body = 7'b0000110;
+            4'hd: body = 7'b0100001;
             4'hc: body = 7'b1000110;
             4'hb: body = 7'b0000011;
             4'ha: body = 7'b0001000;

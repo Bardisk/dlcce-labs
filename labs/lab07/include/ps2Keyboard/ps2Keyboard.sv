@@ -20,7 +20,7 @@ module ps2Keyboard(clk, clrn, ps2_clk, ps2_data, nextdata_n, data, ready, overfl
     
     wire sampling = ps2_clk_sync[2] & ~ps2_clk_sync[1];
 
-    always @(posedge clk)
+    always @(posedge clk, negedge clrn)
     begin
         if (!clrn) begin // reset
             count <= 0;
@@ -31,19 +31,25 @@ module ps2Keyboard(clk, clrn, ps2_clk, ps2_data, nextdata_n, data, ready, overfl
         end
         else 
         begin
+            if (overflow) begin
+                w_ptr <= 0;
+                r_ptr <= 0;
+                ready <= 0;
+                overflow <= 0;
+            end
             if (ready) // ready to output next data
                 if (!nextdata_n) begin //read next data
-                    r_ptr <= r_ptr + 1;
-                    if (w_ptr == (r_ptr + 1)) //empty
+                    r_ptr <= r_ptr + 3'b1;
+                    if (w_ptr == (r_ptr + 3'b1)) //empty
                         ready <= 0;
                 end
             if (sampling) begin
                 if (count == 10) begin
                     if ((buffer[0] == 0) && (ps2_data) && (^buffer[9:1])) begin
                         fifo[w_ptr] <= buffer[8:1]; // keyboard scan code
-                        w_ptr <= w_ptr + 1;
+                        w_ptr <= w_ptr + 3'b1;
                         ready <= 1;
-                        overflow <= overflow | (r_ptr == (w_ptr + 1));
+                        overflow <= overflow | (r_ptr == (w_ptr + 3'b1));
                     end
                     count <= 0;
                 end 

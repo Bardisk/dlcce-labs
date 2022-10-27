@@ -5,6 +5,7 @@
 `include "ledmonitor/ledmonitor.sv"
 `include "clockGenerator/clockGenerator.sv"
 `include "keyboardCtr/keyboardCtr.sv"
+`include "debounce/debounce.sv"
 //add includes here
 
 module lab07(
@@ -20,15 +21,20 @@ module lab07(
     wire reset = SW[0];
 
     wire clock10KHZ;
-    clockGenerator clock10KHZ_Gen(
+    wire clock10MHZ;
+    clockGenerator #(10000) clock10KHZ_Gen(
         .oclock(clock100MHZ),
         .rst(reset),
         .nclock(clock10KHZ)
     );
+    clockGenerator #(10000000) clock10MHZ_Gen(
+        .oclock(clock100MHZ),
+        .rst(reset),
+        .nclock(clock10MHZ)
+    );
 
     wire [7:0] screenEn;
     wire [7:0][3:0] display;
-
     numScreen mainScreen(
         .clock(clock10KHZ),
         .rst(reset),
@@ -45,7 +51,12 @@ module lab07(
         .ps2_clk(ps2_clk),
         .en(screenEn),
         .ps2_data(ps2_data),
-        .mainclk(clock100MHZ)
+        .mainclk(clock10MHZ),
+        .ctrlLight(LED[15]),
+        .shiftLight(LED[14]),
+        .capsLight(LED[13]),
+        .ready(LED[0]),
+        .overflow(LED[1])
     );
 
 endmodule
