@@ -55,7 +55,6 @@ module keyboardCtr(
     always @(posedge mainclk, negedge reset) begin
         if (!reset) begin
             nowCode <= 0;
-            counter <= 0;
         end
         else if (ready)
             nowCode <= data;
@@ -78,6 +77,7 @@ module keyboardCtr(
         if (!reset) begin
             ispressed <= 128'b0;
             capsLight <= 0;
+            counter <= 0;
         end
         else if (ready && data != 8'hE0 && data != 8'hF0) begin
             if (relkey) begin

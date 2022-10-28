@@ -5,14 +5,14 @@ compile: build/wave.vcd
 
 pre-compile: compile
 	@if ! [ -e build ]; then mkdir build; fi;
-	@iverilog -E -I include/ $(TNAME).sv -o build/$(TNAME)_pre.sv
+	@iverilog -o build/$(TNAME)_pre.sv -E -I include/ $(TNAME).sv
 
 run: compile
 	@gtkwave build/wave.vcd
 
 build/wave.vcd: $(TNAME).sv $(TNAME)_tb.sv
 	@if ! [ -e build ]; then mkdir build; fi;
-	@iverilog -I include/ $(TNAME)_tb.sv -o build/$(TNAME).vexe
+	@iverilog -o build/$(TNAME).vexe -I include/ $(TNAME)_tb.sv
 	@./build/$(TNAME).vexe
 
 clean:
@@ -29,10 +29,11 @@ create:
 
 unit:
 	@if ! [ -e build ]; then mkdir build; fi;
-	@iverilog -I include/ include/$(NAME)/$(NAME)_tb.sv -o build/$(NAME).vexe
+	@iverilog -o build/$(NAME).vexe -I include/ include/$(NAME)/$(NAME)_tb.sv
 	@./build/$(NAME).vexe
 
 immod:
+	@if ! [ -e include ]; then mkdir include; fi;
 	@cp -a ../../libs/$(MOD) ./include/
 	@sed -i '/\/\/add includes here/i\`include "$(MOD)/$(MOD).sv"' $(TNAME).sv
 
