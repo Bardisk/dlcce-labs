@@ -13,7 +13,7 @@ run: compile
 build/wave.vcd: $(TNAME).sv $(TNAME)_tb.sv
 	@if ! [ -e build ]; then mkdir build; fi;
 	@iverilog -o build/$(TNAME).vexe -I include/ $(TNAME)_tb.sv
-	@./build/$(TNAME).vexe
+	@vvp ./build/$(TNAME).vexe
 
 clean:
 	-@if [ -e build ]; then rm -r build; fi;
@@ -30,7 +30,7 @@ create:
 unit:
 	@if ! [ -e build ]; then mkdir build; fi;
 	@iverilog -o build/$(NAME).vexe -I include/ include/$(NAME)/$(NAME)_tb.sv
-	@./build/$(NAME).vexe
+	@vvp ./build/$(NAME).vexe
 
 immod:
 	@if ! [ -e include ]; then mkdir include; fi;
