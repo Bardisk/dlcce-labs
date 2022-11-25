@@ -7,6 +7,8 @@ create:
 	@cat templates/template.mk >$(CREDIR)/makefile
 	@cat templates/template.sv >$(CREDIR)/$(NAME).sv
 	@cat templates/template_tb.sv >$(CREDIR)/$(NAME)_tb.sv
+	@mkdir $(CREDIR)/include
+	@cp -r libs/config $(CREDIR)/include/
 	@cp .gitignore $(CREDIR)/
 	@cp .svlint.toml $(CREDIR)/
 	@sed -i 's/template/$(NAME)/g' $(CREDIR)/$(NAME).sv $(CREDIR)/$(NAME)_tb.sv

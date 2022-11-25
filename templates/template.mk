@@ -1,5 +1,7 @@
 TNAME ?= $(basename $(notdir $(shell find *.sv | grep -v tb)))
 
+SUBDIR = include/$(NAME)
+
 compile: build/wave.vcd
 	@echo "Compile finished!"
 
@@ -20,12 +22,15 @@ clean:
 
 create:
 	@if ! [ -e include ]; then mkdir include; fi;
-	@mkdir include/$(NAME)
-	@cat ../../templates/template_submodule.sv >include/$(NAME)/$(NAME).sv
-	@cat ../../templates/template_submodule_tb.sv >include/$(NAME)/$(NAME)_tb.sv
-	@sed -i 's/template.sv/$(TNAME).sv/g' include/$(NAME)/$(NAME)_tb.sv
-	@sed -i 's/template/$(NAME)/g' include/$(NAME)/$(NAME).sv include/$(NAME)/$(NAME)_tb.sv
+	@mkdir $(SUBDIR)
+	@cat ../../templates/template_submodule.sv >$(SUBDIR)/$(NAME).sv
+	@cat ../../templates/template_submodule_tb.sv >$(SUBDIR)/$(NAME)_tb.sv
+	@sed -i 's/template.sv/$(TNAME).sv/g' $(SUBDIR)/$(NAME)_tb.sv
+	@sed -i 's/template/$(NAME)/g' $(SUBDIR)/$(NAME).sv $(SUBDIR)/$(NAME)_tb.sv
 	@sed -i '/\/\/add includes here/i\`include "$(NAME)/$(NAME).sv"' $(TNAME).sv
+
+lsmod:
+	@ls ../../libs
 
 unit:
 	@if ! [ -e build ]; then mkdir build; fi;

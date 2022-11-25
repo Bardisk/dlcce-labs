@@ -1,6 +1,8 @@
 `ifndef module_config
 `define module_config
 
+`define RES_640_480
+
 `ifdef RES_640_480
     `define H_FRONTPROCH (96)
     `define H_ACTIVE (144)
@@ -12,6 +14,8 @@
     `define V_TOTAL (525)
     `define S_WIDTH (640)
     `define S_HEIGHT (480)
+    `define C_FIELD_WIDTH (70)
+    `define C_FIELD_HEIGHT (30)
 `endif
 
 `endif

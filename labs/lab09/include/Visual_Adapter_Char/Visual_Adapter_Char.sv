@@ -19,8 +19,8 @@ module Visual_Adapter_Char(
 
     parameter block_width = 9;
     parameter block_height = 16;
-    parameter field_width = 70;
-    parameter field_height = 30;
+    parameter field_width = `C_FIELD_WIDTH;
+    parameter field_height = `C_FIELD_HEIGHT;
     parameter screen_width = 640;
     parameter screen_
 
