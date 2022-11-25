@@ -36,9 +36,16 @@ module RAM #(
     always @(posedge memclk)
         if (en && wen)
             memory[write_addr] <= datain;
+    
+    integer i;
+
     initial begin
         if (typ == `TPLT_VRAM)
             $readmemh("C:/Users/Bardi/Work/Hardware/Shadow/memories/VRAM_templates/shizuku1.memory", memory, 0, size - 1);
+        else begin
+            for (i = 0; i < size; i++)
+                memory[i] = 0;
+        end
     end
 endmodule
 
@@ -71,6 +78,20 @@ module ROM #(
         if (typ == `CHAR_ROM)
             $readmemh("C:/Users/Bardi/Work/Hardware/Shadow/memories/font.memory", memory, 0, size - 1);
     end
+endmodule
+
+module FIFO
+#(
+    parameter length = 16,
+)(
+    input   wire            wren,
+    input   wire            rden,
+    input   wire    [8]
+    output data,
+    output 
+);
+
+
 endmodule
 
 `endif

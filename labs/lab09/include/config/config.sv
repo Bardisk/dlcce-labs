@@ -15,7 +15,7 @@
     `define S_WIDTH (640)
     `define S_HEIGHT (480)
     `define C_FIELD_WIDTH (70)
-    `define C_FIELD_HEIGHT (30)
+    `define C_FIELD_HEIGHT (29)
 `endif
 
 `endif
