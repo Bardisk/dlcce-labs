@@ -8,8 +8,8 @@ run: compile
 
 build/wave.vcd: $(TNAME).sv $(TNAME)_tb.sv
 	@if ! [ -e build ]; then mkdir build; fi;
-	@iverilog -I include/ $(TNAME)_tb.sv -o build/$(TNAME).vexe
-	@./build/$(TNAME).vexe
+	@iverilog -o build/$(TNAME).vexe -I include/ $(TNAME)_tb.sv
+	@vvp build/$(TNAME).vexe
 
 clean:
 	-@if [ -e build ]; then rm -r build; fi;
