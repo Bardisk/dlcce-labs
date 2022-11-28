@@ -16,7 +16,7 @@ module Visual_Adapter_Char(
     output  wire                req_en,
     output  wire    [3:0]       vga_r,
     output  wire    [3:0]       vga_g,
-    output  wire    [3:0]       vga_b,
+    output  wire    [3:0]       vga_b
 );
 
     parameter block_width = 9;
@@ -26,7 +26,7 @@ module Visual_Adapter_Char(
     parameter screen_width = `S_WIDTH;
     parameter screen_height = `S_HEIGHT;
 
-    wire [3:0] offsetw, offseth;
+    reg [3:0] offsetw, offseth;
     reg [6:0] hb_addr;
     reg [4:0] vb_addr;
     always @(posedge clk, negedge rst)
@@ -71,7 +71,7 @@ module Visual_Adapter_Char(
     
 
     ROM char_rom(
-        .memclk(fclk)
+        .memclk(fclk),
         .read_addr(rom_addr),
         .en(1'b1),
         .dataout(out)
@@ -79,7 +79,7 @@ module Visual_Adapter_Char(
 
     wire [11:0] vga_data;
     
-    assign req_addr = (hb_addr < field_width && vb_addr < field_height) ? {hb_addr, vb_addr} : 12'b0;
+    assign req_addr = (hb_addr < field_width && vb_addr < field_height) ? {vb_addr, hb_addr} : 12'b0;
 
     assign req_en = (hb_addr < field_width && vb_addr < field_height);
 
@@ -89,6 +89,7 @@ module Visual_Adapter_Char(
 
     assign vga_data = (hb_addr < field_width && vb_addr < field_height) ? (out[offsetw] ? 12'heee : 0) : 12'b0;
 
+    assign {vga_r, vga_g, vga_b} = vga_data;
 
 endmodule
 

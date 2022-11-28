@@ -1,15 +1,15 @@
 `timescale 1ns/1ps
 
-`include "lab08.sv"
+`include "lab09.sv"
 
-module RAM_tb();
+module Kbd_CU_tb();
 
 initial begin
     $dumpfile("build/wave.vcd");
     $dumpvars;
 end
 
-RAM tb(
+Kbd_CU tb(
 
 );
 

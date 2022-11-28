@@ -16,9 +16,10 @@ module numScreen(
     wire [7:0][7:0] monitorDisplay;
 
     genvar i;
+    
     generate
-        for (i = 0; i < 8; i++)
-            begin: seggroups
+        for (i = 0; i < 8; i = i + 1)
+        begin: seggroups
             seg7 myseg7(
                 .N(display[i]), 
                 .dot(dots[i]),

@@ -4,6 +4,7 @@
 `define TPLT_VRAM   7001
 `define CHAR_VRAM   7002
 `define CHAR_ROM    9001
+`define MAIN_VRAM   7000
 
 module RAM #(
     parameter width = 8,
@@ -42,6 +43,8 @@ module RAM #(
     initial begin
         if (typ == `TPLT_VRAM)
             $readmemh("C:/Users/Bardi/Work/Hardware/Shadow/memories/VRAM_templates/shizuku1.memory", memory, 0, size - 1);
+        else if (typ == `CHAR_VRAM)
+            $readmemh("C:/Users/Bardi/Work/Hardware/Shadow/memories/VRAM_templates/charram.memory", memory, 0, 10);
         else begin
             for (i = 0; i < size; i++)
                 memory[i] = 0;
@@ -82,16 +85,63 @@ endmodule
 
 module FIFO
 #(
-    parameter length = 16,
+    parameter addr_length = 4,
+    parameter width = 8
 )(
-    input   wire            wren,
-    input   wire            rden,
-    input   wire    [8]
-    output data,
-    output 
+    input   wire                    clk,
+    input   wire                    rst,
+    input   wire                    wren,
+    input   wire                    rden,
+    input   wire    [width-1:0]     datain,
+    output  wire    [width-1:0]     dataout,
+    output  reg                     valid,
+    output  reg                     overflow
 );
 
+    reg [width-1:0] body [(2**addr_length-1):0];
+    reg [addr_length-1:0] w_ptr, r_ptr;
+
+    always @(posedge clk, negedge rst) begin
+        if (!rst) begin
+            w_ptr <= 0;
+            r_ptr <= 0;
+            overflow <= 0;
+            valid <= 0;
+        end
+        else begin
+            if (rden && valid) begin
+                r_ptr <= r_ptr + {width{1'b1}};
+                if (w_ptr == r_ptr + {width{1'b1}})
+                    valid <= 0;
+            end
+            if (wren) begin
+                body[w_ptr] <= datain;
+                w_ptr <= w_ptr +  {width{1'b1}};
+                valid <= 1;
+                overflow <= overflow | (r_ptr == (w_ptr +  {width{1'b1}}));
+            end
+        end
+    end
+
+    assign dataout = body[r_ptr];
 
 endmodule
+
+// module Memhub_Write #(
+//     parameter width = 8,
+//     parameter addr_width = 19,
+//     parameter channels = 2,
+//     //A 512KB Memory by default
+// )(
+//     input   wire    [addr_width-1:0]    write_addr [channels-1:0],
+//     input   wire    [width-1:0]         datain [channels-1:0],
+//     input   wire    [channels-1:0]      en,
+//     input   wire    []      wen,
+//     output  reg     [width-1:0]         dataout
+// );
+
+//     FIFO #(.width(addr_width + width))
+
+// endmodule
 
 `endif

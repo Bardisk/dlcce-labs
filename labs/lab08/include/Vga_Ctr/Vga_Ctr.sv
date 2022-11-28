@@ -1,6 +1,8 @@
 `ifndef module_Vga_Ctr
 `define module_Vga_Ctr
 
+`include "config/config.sv"
+
 module Vga_Ctr(
     input   wire                clk,
     input   wire                rst,
