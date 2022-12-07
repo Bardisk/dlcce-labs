@@ -5,18 +5,25 @@
 `include "keyboardCtr/keyboardCtr.sv"
 
 module Kbd_CU(
-    input   wire                clk,
-    input   wire                rst,
-    output  wire    [11:0]      m_addr,
-    output  wire    [11:0]      m_data
+    input   wire                    clk,
+    input   wire                    rst,
+    input   wire                    ps2_clk,
+    input   wire                    ps2_data,
+    input   wire                    wen,
+    output  wire                    ready,
+    output  wire    [`HALF_WIDE]    mdata
 );
 
-    wire [7:0] nowCode;
-    wire [7:0] nowAscii;
-
-    always @(posedge clk, negedge rst) begin
-        if (!rst) 
-    end
+    keyboardCtr keyboard_ctr(
+        .ps2_clk(ps2_clk),
+        .ps2_data(ps2_data),
+        .mainclk(clk),
+        .reset(rst),
+        .en(wen),
+        .res_ready(ready),
+        .resAscii(mdata[15:8]),
+        .resCode(mdata[7:0])
+    );
 
 endmodule
 

@@ -20,7 +20,19 @@ module RAM #(
     input   wire                        en,
     input   wire                        wen,
     output  reg     [width-1:0]         dataout
+    //used only for char_vram
 );
+    generate
+        
+    endgenerate
+    generate
+        if (typ == `CHAR_VRAM) begin
+            
+            always @(posedge memclk) begin
+                
+            end
+        end
+    endgenerate
 
     reg [width-1:0] memory [size-1:0];
 

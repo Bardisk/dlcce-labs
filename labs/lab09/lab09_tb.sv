@@ -16,7 +16,7 @@ initial begin
 
     #10
     rst = 1;
-    #4000000
+    #400
     $finish;
 end
 

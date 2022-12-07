@@ -7,7 +7,7 @@ module codeToAscii(addr, out);
     reg [7:0] lut [0:95][0:3];
     initial
     begin
-        $readmemh("/home/litrehinn/Documents/DLCCE/Temporary/meml.txt", lut);
+        $readmemh("C:/Users/Bardi/Work/Hardware/Shadow/memories/meml.memory", lut);
     end
     assign out = lut[addr[7:0]][addr[9:8]];
 endmodule

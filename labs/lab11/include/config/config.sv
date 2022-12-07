@@ -96,4 +96,7 @@
 `define ASCII_BACK (8'h08)
 `define ASCII_LF (8'h0a)
 
+`define REG_NUM_WIDTH (5)
+`define REG_NUM_WIDE `REG_NUM_WIDTH-1:0
+
 `endif

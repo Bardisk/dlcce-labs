@@ -18,23 +18,22 @@ module keyboardCtr(
     output reg capsLight,
     output wire ctrlLight,
     output wire shiftLight,
+    output reg res_ready,
     output wire ready,
     output wire overflow,
-    output reg [7:0] nowCode,
-    output wire [7:0] nowAscii,
-    output reg [7:0] en,
-    output wire [7:0][3:0] display
+    output reg [7:0] resCode,
+    output wire [7:0] resAscii
 );
 
     wire [7:0] data;
-
+    reg [7:0] nowCode;
+    wire [7:0] nowAscii;
     reg [7:0] counter = 0;
-    assign display[7:6] = counter;
 
-    codeToAscii transvertor({shiftLight ^ (capsLight & ~ctrlLight), ctrlLight, nowCode}, nowAscii);
+    codeToAscii now_transvertor({shiftLight ^ (capsLight & ~ctrlLight), ctrlLight, nowCode}, nowAscii);
 
-    assign display[3:2] = nowCode;
-    assign display[1:0] = nowAscii;
+    codeToAscii res_transvertor({shiftLight ^ (capsLight & ~ctrlLight), ctrlLight, resCode}, resAscii);
+
     ps2Keyboard coreController(
         .clk(mainclk),
         .clrn(reset),
@@ -57,7 +56,7 @@ module keyboardCtr(
         if (!reset) begin
             nowCode <= 0;
         end
-        else if (ready)
+        else if(en) if (ready)
             nowCode <= data;
     end
     
@@ -80,27 +79,34 @@ module keyboardCtr(
             ispressed <= 128'b0;
             capsLight <= 0;
             counter <= 0;
+            res_ready <= 0;
+            resCode <= 0;
         end
-        else if (en)
-        if (ready && data != 8'hE0 && data != 8'hF0) begin
-            if (relkey) begin
-                if (ispressed[data[6:0]]) begin
-                    ispressed[data[6:0]] <= 0;
-                    if (data == `CAPS_SC && lastCaps)
-                        capsLight <= 0;
+        else if (en) begin
+            if (ready && data != 8'hE0 && data != 8'hF0) begin
+                if (relkey) begin
+                    res_ready <= 0;
+                    if (ispressed[data[6:0]]) begin
+                        ispressed[data[6:0]] <= 0;
+                        if (data == `CAPS_SC && lastCaps)
+                            capsLight <= 0;
+                    end
                 end
-                
-            end
-            else begin
-                if (!ispressed[data[6:0]]) begin //newly pressed
-                    ispressed[data[6:0]] <= 1;
-                    if (data == `CAPS_SC)
-                        capsLight <= 1;
-                    counter <= counter + 1;
+                else begin
+                    if (!ispressed[data[6:0]]) begin //newly pressed
+                        ispressed[data[6:0]] <= 1;
+                        if (data == `CAPS_SC)
+                            capsLight <= 1;
+                        counter <= counter + 1;
+                        res_ready <= 1;
+                        resCode <= data;
+                    end
+                    else res_ready <= 0;
                 end
-                
             end
+            else res_ready <= 0;
         end
+        else res_ready <= 0;
     end
 
     always @(posedge mainclk, negedge reset) begin
@@ -109,17 +115,6 @@ module keyboardCtr(
         else if (en)
         if (ready && data != 8'hE0)
             relkey <= (data == 8'hF0);
-    end
-
-    always @(posedge mainclk, negedge reset) begin
-        if (!reset)
-            en <= 8'b0;
-        else if (en)
-        begin
-            if (nowCode != 8'hE0 && nowCode != 8'hF0 && ispressed[nowCode[6:0]])
-                en <= 8'b11001111;
-            else en <= 8'b11000000;
-        end
     end
 
 endmodule
