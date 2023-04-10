@@ -7,8 +7,9 @@ module clockGenerator(
     output reg nclock
 );
 
+    parameter ofreq = 100000000;
     parameter freq = 10000;
-    parameter timeout = 50000000/freq - 1;
+    parameter timeout = (ofreq / 2) / freq - 1;
 
     reg [31:0] cnt;
     always @(posedge oclock, negedge rst) begin

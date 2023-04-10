@@ -32,7 +32,7 @@ module rv32is(
     wire data_write_en;
     wire [2:0] data_mode;
     
-    wire [`WORD_WIDE] next_pc, jalr_reg, offset;
+    wire [`WORD_WIDE] wire_next_pc, jalr_reg, offset;
     wire pc_offset_sel, pc_source_sel;
     wire [`WORD_WIDE] inst = inst_read_data;
     wire RegWr, ALUAsrc, MemtoReg, MemWr;
@@ -42,15 +42,19 @@ module rv32is(
     wire [`REG_NUM_WIDE] Ranum, Rbnum, Rwnum;
     wire [`WORD_WIDE] Ra, Rb;
     wire [`WORD_WIDE] imm;
+    
+    wire [`WORD_WIDE] next_pc;
 
     pc_generator PG (
-        .next_pc(next_pc),
+        .next_pc(wire_next_pc),
         .pc_offset_sel(pc_offset_sel),
         .pc_source_sel(pc_source_sel),
         .pc(pc),
         .jalr_reg(Ra),
         .offset(imm)
     );
+
+    assign next_pc = rst ? 0 : wire_next_pc; 
 
     always @(negedge clk, posedge rst)
         if (rst) pc <= 0;
@@ -82,7 +86,7 @@ module rv32is(
 
     wire [`WORD_WIDE] aluresult;
 
-    wire [`WORD_WIDE] dataa = ALUAsrc ? next_pc : Ra;
+    wire [`WORD_WIDE] dataa = ALUAsrc ? pc : Ra;
     reg [`WORD_WIDE] datab;
 
     regheap myregfile(

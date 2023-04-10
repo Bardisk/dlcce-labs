@@ -24,7 +24,7 @@ module regheap (
     assign busB = regs[Rb];
     always @(negedge WrClk) 
     begin
-        if(RegWr & Rw)
+        if(RegWr && Rw)
             regs[Rw] <= busW;
     end
     
